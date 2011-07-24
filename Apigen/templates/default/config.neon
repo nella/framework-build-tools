@@ -1,6 +1,5 @@
 resources:
 	resources: resources
-	favicon.ico: favicon.ico
 
 templates:
 	common:
