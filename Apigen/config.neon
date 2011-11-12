@@ -1,3 +1,5 @@
+# Character set of source files
+charset: ['UTF-8']
 # Main project name prefix
 main: 'Nella'
 
@@ -30,6 +32,10 @@ todo: No
 sourceCode: Yes
 # Save a list of undocumented classes, methods, properties and constants into a file
 undocumented: ''
+# Add a link to download documentation as a ZIP archive
+download: 'http://s3.nella-project.org/package/NellaFramework-2.0dev.zip'
+# Save a checkstyle report of poorly documented elements into a file
+report: ''
 
 # Wipe out the destination directory first
 wipeout: Yes
