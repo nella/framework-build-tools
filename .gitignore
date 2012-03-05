@@ -1,0 +1,9 @@
+!.gitignore
+!apigen-template
+!apigen.neon
+!build.xml
+!build.sh
+!phpunit.xml
+!phpcs.xml
+!phpmd.xml
+*
