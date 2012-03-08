@@ -23,7 +23,7 @@ sed -i "s/\$WCDATE\$'/$WCDATE'/g" Nella/Framework.php
 # Build sandbox #
 #################
 
-git clone git://github.com/nella/sandbox.git sandbox
+git clone git://github.com/nella/framework-sandbox.git sandbox
 cp -r vendors/* sandbox/libs/
 cp -r Nella/* sandbox/libs/Nella
 echo "Disallow: /" > sandbox/libs/Nette/netterobots.txt
