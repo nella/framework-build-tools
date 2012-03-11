@@ -28,7 +28,9 @@ the file LICENSE.md that was distributed with this source code.
 	<script n:if="$config->googleAnalytics" type="text/javascript">
 		var _gaq = _gaq || [];
 		_gaq.push(['_setAccount', {$config->googleAnalytics}]);
+		_gaq.push(['_setDomainName', 'api.nellafw.org']);
 		_gaq.push(['_trackPageview']);
+		_gaq.push(['_trackPageLoadTime']);
 
 		(function() {
 			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
