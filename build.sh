@@ -24,11 +24,16 @@ sed -i "s/\$WCDATE\$'/$WCDATE'/g" Nella/Framework.php
 #################
 
 git clone git://github.com/nella/framework-sandbox.git sandbox
-cp -r vendors/* sandbox/libs/
+cp -r vendors/pear-nette/Nette/Nette sandbox/libs/Nette
+cp vendors/pear-nette/Nette/license.txt sandbox/libs/Nette/
+cp -r vendors/doctrine/common/lib/Doctrine sandbox/libs/Doctrine
+cp -r vendors/doctrine/dbal/lib/Doctrine sandbox/libs/Doctrine
+cp -r vendors/doctrine/orm/lib/Doctrine sandbox/libs/Doctrine
+cp -r vendors/doctrine/migrations/lib/Doctrine sandbox/libs/Doctrine
+cp vendors/doctrine/orm/LICENSE sandbox/libs/Doctrine/
+cp -r vendors/beberlei/DoctrineExtensions sandbox/libs/DoctrineExtensions
+cp -r vendors/symfony/console/Symfony sandbox/libs/Symfony
 cp -r Nella/* sandbox/libs/Nella
-echo "Disallow: /" > sandbox/libs/Nette/netterobots.txt
-echo "Disallow: /" > sandbox/libs/Nella/netterobots.txt
-echo "Disallow: /" > sandbox/libs/Doctrine/netterobots.txt
 
 ##########################################
 # GIT remove .gitignore .gitmodules .git #
@@ -43,7 +48,7 @@ find . -name ".git*" -print0 | xargs -0 rm -rf
 APIGEN_CONFIG="build/apigen.neon"
 APIGEN_TEMPLATE_CONFIG="build/apigen-template/config.neon"
 
-apigen -s "Nella" -s "vendors" -d "API-reference" --config "$APIGEN_CONFIG" --template-config "$APIGEN_TEMPLATE_CONFIG"
+apigen -s "sandbox/libs" -d "API-reference" --config "$APIGEN_CONFIG" --template-config "$APIGEN_TEMPLATE_CONFIG"
 
 #########
 # Clean #
