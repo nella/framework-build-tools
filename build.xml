@@ -20,13 +20,7 @@
 		</parallel>
 	</target>
 
-	<target name="vendors" description="Init / Update vendors">
-		<exec executable="sh">
-			<arg value="${basedir}/vendors.sh"/>
-		</exec>
-	</target>
-
-	<target name="clean" depends="vendors" description="Cleanup build artifacts">
+	<target name="clean" description="Cleanup build artifacts">
 		<delete dir="${builddir}/code-browser"/>
 		<delete dir="${builddir}/coverage"/>
 		<delete dir="${builddir}/logs"/>
