@@ -12,7 +12,7 @@ googleCseId: '012735254293848154673:djri9wy65qc'
 # Google Custom Search label
 googleCseLabel: 'api'
 # Google Analytics tracking code
-googleAnalytics: 'UA-2126429-15'
+googleAnalytics: 'UA-2126429-17'
 # Grouping of classes
 groups: auto
 # List of allowed HTML tags in documentation
