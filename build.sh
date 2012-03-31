@@ -24,8 +24,8 @@ sed -i "s/\$WCDATE\$'/$WCDATE'/g" Nella/Framework.php
 #################
 
 git clone git://github.com/nella/framework-sandbox.git sandbox
-cp -r vendors/pear-nette/Nette/Nette/* sandbox/libs/Nette/
-cp vendors/pear-nette/Nette/license.txt sandbox/libs/Nette/
+cp -r vendors/nette/nette/Nette/* sandbox/libs/Nette/
+cp vendors/nette/nette/license.txt sandbox/libs/Nette/
 cp -r vendors/doctrine/common/lib/Doctrine/* sandbox/libs/Doctrine/
 cp -r vendors/doctrine/dbal/lib/Doctrine/* sandbox/libs/Doctrine/
 cp -r vendors/doctrine/orm/lib/Doctrine/* sandbox/libs/Doctrine/
