@@ -35,6 +35,12 @@ cp -r vendors/beberlei/DoctrineExtensions/lib/DoctrineExtensions/* sandbox/libs/
 cp -r vendors/symfony/console/Symfony/* sandbox/libs/Symfony/
 cp -r Nella/* sandbox/libs/Nella
 
+#########################
+# Nette Framework Tools #
+#########################
+
+git clone git://github.com/nella/framework-tools.git tools
+
 ##########################################
 # GIT remove .gitignore .gitmodules .git #
 ##########################################
@@ -66,6 +72,7 @@ mkdir "$PACKAGE_NAME"
 #mv "client-side" "$PACKAGE_NAME/"
 mv "Nella" "$PACKAGE_NAME/"
 mv "sandbox" "$PACKAGE_NAME/"
+mv "tools" "$PACKAGE_NAME/"
 mv "LICENSE.txt" "$PACKAGE_NAME/"
 mv "VERSION.txt" "$PACKAGE_NAME/"
 mv "HISTORY.txt" "$PACKAGE_NAME/"
