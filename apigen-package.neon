@@ -1,0 +1,53 @@
+# Character set of source files
+charset: ['UTF-8']
+# Main project name prefix
+main: 'Nella'
+
+# Title of generated documentation
+title: 'Nella Framework'
+# Documentation base URL
+#baseUrl: 'http://api.nellafw.org'
+# Google Custom Search ID
+#googleCseId: '011695612144994671661:mlritoycntc'
+# Google Custom Search label
+#googleCseLabel: 'api'
+# Google Analytics tracking code
+#googleAnalytics: 'UA-2126429-17'
+# Grouping of classes
+groups: auto
+# List of allowed HTML tags in documentation
+allowedHtml: [b, i, a, ul, ol, li, p, br, var, samp, kbd, tt]
+# Element types for search input autocomplete
+autocomplete: [classes, constants, functions]
+
+# Generate documentation for methods and properties with given access level
+accessLevels: [public, protected]
+# Generate documentation for elements marked as internal and display internal documentation parts
+internal: Yes
+# Generate documentation for PHP internal classes
+php: Yes
+# Generate tree view of classes, interfaces and exceptions
+tree: Yes
+# Generate documentation for deprecated classes, methods, properties and constants
+deprecated: No
+# Generate documentation of tasks
+todo: No
+# Generate highlighted source code files
+sourceCode: Yes
+# Add a link to download documentation as a ZIP archive
+#download: Yes
+# Save a checkstyle report of poorly documented elements into a file
+report: ''
+
+# Wipe out the destination directory first
+wipeout: Yes
+# Don't display scaning and generating messages
+quiet: No
+# Display progressbars
+progressbar: Yes
+# Use colors
+colors: Yes
+# Check for update
+updateCheck: Yes
+# Display additional information in case of an error
+debug: No

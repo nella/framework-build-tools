@@ -51,10 +51,12 @@ find . -name ".git*" -print0 | xargs -0 rm -rf
 # Apigen #
 ##########
 
-APIGEN_CONFIG="build/apigen.neon"
+APIGEN_CONFIG_PACKAGE="build/apigen-package.neon"
+APIGEN_CONFIG_WEB="build/apigen-web.neon"
 APIGEN_TEMPLATE_CONFIG="build/apigen-template/config.neon"
 
-apigen -s "sandbox/libs" -d "API-reference" --config "$APIGEN_CONFIG" --template-config "$APIGEN_TEMPLATE_CONFIG"
+apigen -s "sandbox/libs" -d "API-reference" --config "$APIGEN_CONFIG_PACKAGE" --template-config "$APIGEN_TEMPLATE_CONFIG"
+apigen -s "sandbox/libs" -d "API" --config "$APIGEN_CONFIG_WEB" --template-config "$APIGEN_TEMPLATE_CONFIG"
 
 #########
 # Clean #
@@ -88,6 +90,7 @@ tar cvjf "$PACKAGE_NAME.tar.bz2" "$PACKAGE_NAME"
 
 # zip
 7z a -mx9 "$PACKAGE_NAME.zip" "$PACKAGE_NAME"
+7z a -mx9 "api.nellafw.org.zip" "API"
 
 # 7z
 7z a -mx9 "$PACKAGE_NAME.7z" "$PACKAGE_NAME"
