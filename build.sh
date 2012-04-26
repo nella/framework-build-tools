@@ -31,7 +31,6 @@ cp -r vendors/doctrine/dbal/lib/Doctrine/* sandbox/libs/Doctrine/
 cp -r vendors/doctrine/orm/lib/Doctrine/* sandbox/libs/Doctrine/
 cp -r vendors/doctrine/migrations/lib/Doctrine/* sandbox/libs/Doctrine/
 cp vendors/doctrine/orm/LICENSE sandbox/libs/Doctrine/
-cp -r vendors/beberlei/DoctrineExtensions/lib/DoctrineExtensions/* sandbox/libs/DoctrineExtensions/
 cp -r vendors/symfony/console/Symfony/* sandbox/libs/Symfony/
 cp -r Nella/* sandbox/libs/Nella
 
