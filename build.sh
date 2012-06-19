@@ -6,33 +6,24 @@
 
 PACKAGE_VERSION_NAME="2.0dev"
 
-###################################################################################
-# GIT commit build (hash, date) - history.txt / version.txt / Nella/Framework.php #
-###################################################################################
+#############################################
+# GIT commit build (hash, date) - history.txt
+#############################################
 
-WCREV=`git log -n 1 --pretty="%h"`
-WCDATE=`git log -n 1 --pretty="%cd" --date=short`
-
-echo `git log -n 500 --pretty="%cd (%h): %s" --date-order --date=short > HISTORY.txt`
-echo `git log -n 1 --pretty="Nella Framework 2.0-dev (revision %h released on %cd)" --date=short > VERSION.txt`
-
-sed -i "s/\$WCREV\$ /$WCREV /g" Nella/Framework.php
-sed -i "s/\$WCDATE\$'/$WCDATE'/g" Nella/Framework.php
+echo `git log -n 500 --pretty="%cd (%h): %s" --date-order --date=short > history.txt`
 
 #################
 # Build sandbox #
 #################
 
-git clone git://github.com/nella/framework-sandbox.git sandbox
-cp -r vendors/nette/nette/Nette/* sandbox/libs/Nette/
-cp vendors/nette/nette/license.txt sandbox/libs/Nette/
-cp -r vendors/doctrine/common/lib/Doctrine/* sandbox/libs/Doctrine/
-cp -r vendors/doctrine/dbal/lib/Doctrine/* sandbox/libs/Doctrine/
-cp -r vendors/doctrine/orm/lib/Doctrine/* sandbox/libs/Doctrine/
-cp -r vendors/doctrine/migrations/lib/Doctrine/* sandbox/libs/Doctrine/
-cp vendors/doctrine/orm/LICENSE sandbox/libs/Doctrine/
-cp -r vendors/symfony/console/Symfony/* sandbox/libs/Symfony/
-cp -r Nella/* sandbox/libs/Nella
+git clone https://github.com/nella/framework-sandbox.git sandbox
+cp -R Nella sandbox/libs/Nella
+cp -R vendor/nette/nette/Nette sandbox/libs/Nette
+cp -R vendor/doctrine/common/lib/Doctrine sandbox/libs/Doctrine
+cp -R vendor/doctrine/dbal/lib/Doctrine sandbox/libs/Doctrine
+cp -R vendor/doctrine/orm/lib/Doctrine sandbox/libs/Doctrine
+cp -R vendor/doctrine/migrations/lib/Doctrine sandbox/libs/Doctrine
+cp -R vendor/symfony/console/Symfony sandbox/libs/Symfony
 
 #########################
 # Nette Framework Tools #
@@ -54,14 +45,14 @@ APIGEN_CONFIG_PACKAGE="build/apigen-package.neon"
 APIGEN_CONFIG_WEB="build/apigen-web.neon"
 APIGEN_TEMPLATE_CONFIG="build/apigen-template/config.neon"
 
-apigen -s "sandbox/libs" -d "API-reference" --config "$APIGEN_CONFIG_PACKAGE" --template-config "$APIGEN_TEMPLATE_CONFIG"
 apigen -s "sandbox/libs" -d "API" --config "$APIGEN_CONFIG_WEB" --template-config "$APIGEN_TEMPLATE_CONFIG"
+apigen -s "sandbox/libs" -d "API-reference" --config "$APIGEN_CONFIG_PACKAGE" --template-config "$APIGEN_TEMPLATE_CONFIG"
 
 #########
 # Clean #
 #########
 
-rm -rf "vendors"
+rm -rf "vendor"
 
 ############
 # Packages #
@@ -74,10 +65,9 @@ mkdir "$PACKAGE_NAME"
 mv "Nella" "$PACKAGE_NAME/"
 mv "sandbox" "$PACKAGE_NAME/"
 mv "tools" "$PACKAGE_NAME/"
-mv "LICENSE.txt" "$PACKAGE_NAME/"
-mv "VERSION.txt" "$PACKAGE_NAME/"
-mv "HISTORY.txt" "$PACKAGE_NAME/"
-mv "README.txt" "$PACKAGE_NAME/"
+mv "license.md" "$PACKAGE_NAME/"
+mv "history.txt" "$PACKAGE_NAME/"
+mv "readme.md" "$PACKAGE_NAME/"
 mv "API-reference" "$PACKAGE_NAME/"
 mv "tests" "$PACKAGE_NAME/"
 
