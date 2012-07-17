@@ -1,9 +1,10 @@
 /*!
- * ApiGen 2.6.0 - API documentation generator for PHP 5.3+
+ * ApiGen 2.7.0 - API documentation generator for PHP 5.3+
  *
  * Copyright (c) 2010-2011 David Grudl (http://davidgrudl.com)
  * Copyright (c) 2011-2012 Jaroslav Hanslík (https://github.com/kukulich)
  * Copyright (c) 2011-2012 Ondřej Nešpor (https://github.com/Andrewsville)
+ * Copyright (c) 2012 Olivier Laviale (https://github.com/olvlvl)
  *
  * For the full copyright and license information, please view
  * the file LICENSE.md that was distributed with this source code.
@@ -54,13 +55,21 @@ $(function() {
 			scrollHeight: 200,
 			max: 20,
 			formatItem: function(data) {
-				return data[1].replace(/^(.+\\)(.+)$/, '<small>$1</small>$2');
+				return data[1].replace(/^(.+\\)(.+)$/, '<span><small>$1</small>$2</span>');
 			},
 			formatMatch: function(data) {
 				return data[1];
 			},
 			formatResult: function(data) {
 				return data[1];
+			},
+			show: function($list) {
+				var $items = $('li span', $list);
+				var maxWidth = Math.max.apply(null, $items.map(function() {
+					return $(this).width();
+				}));
+				// 10px padding
+				$list.width(Math.max(maxWidth + 10, $search.innerWidth()));
 			}
 		}).result(function(event, data) {
 			autocompleteFound = true;
@@ -99,7 +108,7 @@ $(function() {
 	// Switch between natural and alphabetical order
 	var $caption = $('table.summary', $content)
 		.filter(':has(tr[data-order])')
-			.find('caption');
+			.prev('h2');
 	$caption
 		.click(function() {
 			var $this = $(this);
@@ -109,7 +118,7 @@ $(function() {
 			$.cookie('order', order, {expires: 365});
 			var attr = 'alphabetical' === order ? 'data-order' : 'data-order-natural';
 			$this
-				.closest('table')
+				.next('table')
 					.find('tr').sortElements(function(a, b) {
 						return $(a).attr(attr) > $(b).attr(attr) ? 1 : -1;
 					});
@@ -145,6 +154,8 @@ $(function() {
 
 	// Splitter
 	var $document = $(document);
+	var $navigation = $('#navigation');
+	var navigationHeight = $('#navigation').height();
 	var $left = $('#left');
 	var $right = $('#right');
 	var $rightInner = $('#rightInner');
@@ -158,6 +169,13 @@ $(function() {
 	}
 	function setNavigationPosition()
 	{
+		var height = $(window).height() - navigationHeight;
+		$left.height(height);
+		$splitter.height(height);
+		$right.height(height);
+	}
+	function setContentWidth()
+	{
 		var width = $rightInner.width();
 		$rightInner
 			.toggleClass('medium', width <= 960)
@@ -169,7 +187,7 @@ $(function() {
 			$document.mousemove(function(event) {
 				if (event.pageX >= 230 && $document.width() - event.pageX >= 600 + splitterWidth) {
 					setSplitterPosition(event.pageX);
-					setNavigationPosition();
+					setContentWidth();
 				}
 			});
 
@@ -194,5 +212,8 @@ $(function() {
 		setSplitterPosition(parseInt(splitterPosition));
 	}
 	setNavigationPosition();
-	$(window).resize(setNavigationPosition);
+	setContentWidth();
+	$(window)
+		.resize(setNavigationPosition)
+		.resize(setContentWidth);
 });
