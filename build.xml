@@ -99,7 +99,7 @@
 			<arg value="--encoding=utf-8" />
 			<arg value="--report=checkstyle" />
 			<arg value="--report-file=${builddir}/logs/checkstyle.xml" />
-			<arg value="--standard=${builddir}/phpcs.xml" />
+			<arg value="--standard=${builddir}/coding-standard/Nella/ruleset.xml" />
 			<arg path="${sourcedir}" />
 		</exec>
 	</target>
