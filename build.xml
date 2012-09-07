@@ -85,7 +85,7 @@
 
 	<target name="phpcs" description="Find coding standard violations using PHP_CodeSniffer">
 		<exec executable="phpcs">
-			<arg value="--tab-width=4" />
+			<arg value="--tab-width=1" />
 			<arg value="--encoding=utf-8" />
 			<arg value="--standard=${builddir}/coding-standard/Nella/ruleset.xml" />
 			<arg path="${sourcedir}" />
@@ -95,7 +95,7 @@
 
 	<target name="phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer">
 		<exec executable="phpcs" output="/dev/null">
-			<arg value="--tab-width=4" />
+			<arg value="--tab-width=1" />
 			<arg value="--encoding=utf-8" />
 			<arg value="--report=checkstyle" />
 			<arg value="--report-file=${builddir}/logs/checkstyle.xml" />
