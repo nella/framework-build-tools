@@ -4,12 +4,18 @@
 # Config #
 ##########
 
+BUILD_TOOLS_DIR="build-tools"
 PACKAGE_VERSION_NAME="2.0dev"
+PACKAGE_NAME="NellaFramework-$PACKAGE_VERSION_NAME"
+APIGEN_CONFIG="$BUILD_TOOLS_DIR/apigen-package.neon"
+APIGEN_TEMPLATE_CONFIG="$BUILD_TOOLS_DIR/apigen-template/config.neon"
+DATE_NOW=`date +%F`
 
 #############################################
 # GIT commit build (hash, date) - history.txt
 #############################################
 
+WCREV=`git log -n 1 --pretty="%h"`
 echo `git log -n 500 --pretty="%cd (%h): %s" --date-order --date=short > history.txt`
 
 #################
@@ -41,9 +47,6 @@ find . -name ".git*" -print0 | xargs -0 rm -rf
 # Apigen #
 ##########
 
-APIGEN_CONFIG="build/apigen-package.neon"
-APIGEN_TEMPLATE_CONFIG="build/apigen-template/config.neon"
-
 apigen -s "sandbox/libs" -d "API-reference" --config "$APIGEN_CONFIG" --template-config "$APIGEN_TEMPLATE_CONFIG"
 
 #########
@@ -57,7 +60,6 @@ rm -rf "vendor"
 ############
 
 # Prepare
-PACKAGE_NAME="NellaFramework-$PACKAGE_VERSION_NAME"
 mkdir "$PACKAGE_NAME"
 mv "Nella" "$PACKAGE_NAME/"
 mv "sandbox" "$PACKAGE_NAME/"
@@ -79,5 +81,4 @@ tar cvjf "$PACKAGE_NAME.tar.bz2" "$PACKAGE_NAME"
 
 # 7z
 7z a -mx9 "$PACKAGE_NAME.7z" "$PACKAGE_NAME"
-DATE_NOW=`date +%F`
 cp "$PACKAGE_NAME.7z" "$PACKAGE_NAME-$DATE_NOW-$WCREV.7z"
