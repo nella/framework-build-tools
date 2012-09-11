@@ -1,19 +1,24 @@
 /*!
- * ApiGen 2.7.0 - API documentation generator for PHP 5.3+
+ * ApiGen 2.8.0 - API documentation generator for PHP 5.3+
  *
  * Copyright (c) 2010-2011 David Grudl (http://davidgrudl.com)
  * Copyright (c) 2011-2012 Jaroslav Hanslík (https://github.com/kukulich)
  * Copyright (c) 2011-2012 Ondřej Nešpor (https://github.com/Andrewsville)
- * Copyright (c) 2012 Olivier Laviale (https://github.com/olvlvl)
  *
  * For the full copyright and license information, please view
  * the file LICENSE.md that was distributed with this source code.
  */
 
 $(function() {
-	// Menu
-
+	var $document = $(document);
+	var $left = $('#left');
+	var $right = $('#right');
+	var $rightInner = $('#rightInner');
+	var $splitter = $('#splitter');
 	var $groups = $('#groups');
+	var $content = $('#content');
+
+	// Menu
 
 	// Hide deep packages and namespaces
 	$('ul span', $groups).click(function(event) {
@@ -43,11 +48,9 @@ $(function() {
 
 	// Content
 
-	var $content = $('#content');
-
 	// Search autocompletion
 	var autocompleteFound = false;
-	var autocompleteFiles = {'c': 'class', 'co': 'constant', 'f': 'function', 'm': 'class', 'p': 'class', 'cc': 'class'};
+	var autocompleteFiles = {'c': 'class', 'co': 'constant', 'f': 'function', 'm': 'class', 'mm': 'class', 'p': 'class', 'mp': 'class', 'cc': 'class'};
 	var $search = $('#search input[name=q]');
 	$search
 		.autocomplete(ApiGen.elements, {
@@ -69,7 +72,9 @@ $(function() {
 					return $(this).width();
 				}));
 				// 10px padding
-				$list.width(Math.max(maxWidth + 10, $search.innerWidth()));
+				$list
+					.width(Math.max(maxWidth + 10, $search.innerWidth()))
+					.css('left', $search.offset().left + $search.outerWidth() - $list.outerWidth());
 			}
 		}).result(function(event, data) {
 			autocompleteFound = true;
@@ -78,10 +83,13 @@ $(function() {
 			var parts = data[1].split(/::|$/);
 			var file = $.sprintf(ApiGen.config.templates.main[autocompleteFiles[data[0]]].filename, parts[0].replace(/[^\w]/g, '.'));
 			if (parts[1]) {
-				file += '#' + parts[1].replace(/([\w]+)\(\)/, '_$1');
+				file += '#' + ('mm' === data[0] || 'mp' === data[0] ? 'm' : '') + parts[1].replace(/([\w]+)\(\)/, '_$1');
 			}
 			location.push(file);
 			window.location = location.join('/');
+
+			// Workaround for Opera bug
+			$(this).closest('form').attr('action', location.join('/'));
 		}).closest('form')
 			.submit(function() {
 				var query = $search.val();
@@ -108,7 +116,7 @@ $(function() {
 	// Switch between natural and alphabetical order
 	var $caption = $('table.summary', $content)
 		.filter(':has(tr[data-order])')
-			.prev('h2');
+			.find('caption');
 	$caption
 		.click(function() {
 			var $this = $(this);
@@ -118,7 +126,7 @@ $(function() {
 			$.cookie('order', order, {expires: 365});
 			var attr = 'alphabetical' === order ? 'data-order' : 'data-order-natural';
 			$this
-				.next('table')
+				.closest('table')
 					.find('tr').sortElements(function(a, b) {
 						return $(a).attr(attr) > $(b).attr(attr) ? 1 : -1;
 					});
@@ -130,22 +138,10 @@ $(function() {
 		$caption.click();
 	}
 
-	// Delayed hover efect on summary
+	// Open details
 	if (ApiGen.config.options.elementDetailsCollapsed) {
-		var timeout;
 		$('tr', $content).filter(':has(.detailed)')
-			.hover(function() {
-				clearTimeout(timeout);
-				var $this = $(this);
-				timeout = setTimeout(function() {
-					$('.short', $this).hide();
-					$('.detailed', $this).show();
-				}, 500);
-			}, function() {
-				clearTimeout(timeout);
-			}).click(function() {
-				// Immediate hover effect on summary
-				clearTimeout(timeout);
+			.click(function() {
 				var $this = $(this);
 				$('.short', $this).hide();
 				$('.detailed', $this).show();
@@ -153,13 +149,6 @@ $(function() {
 	}
 
 	// Splitter
-	var $document = $(document);
-	var $navigation = $('#navigation');
-	var navigationHeight = $('#navigation').height();
-	var $left = $('#left');
-	var $right = $('#right');
-	var $rightInner = $('#rightInner');
-	var $splitter = $('#splitter');
 	var splitterWidth = $splitter.width();
 	function setSplitterPosition(position)
 	{
@@ -168,13 +157,6 @@ $(function() {
 		$splitter.css('left', position);
 	}
 	function setNavigationPosition()
-	{
-		var height = $(window).height() - navigationHeight;
-		$left.height(height);
-		$splitter.height(height);
-		$right.height(height);
-	}
-	function setContentWidth()
 	{
 		var width = $rightInner.width();
 		$rightInner
@@ -187,7 +169,7 @@ $(function() {
 			$document.mousemove(function(event) {
 				if (event.pageX >= 230 && $document.width() - event.pageX >= 600 + splitterWidth) {
 					setSplitterPosition(event.pageX);
-					setContentWidth();
+					setNavigationPosition();
 				}
 			});
 
@@ -212,8 +194,88 @@ $(function() {
 		setSplitterPosition(parseInt(splitterPosition));
 	}
 	setNavigationPosition();
-	setContentWidth();
-	$(window)
-		.resize(setNavigationPosition)
-		.resize(setContentWidth);
+	$(window).resize(setNavigationPosition);
+
+	// Select selected lines
+	var matches = window.location.hash.substr(1).match(/^\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*$/);
+	if (null !== matches) {
+		var lists = matches[0].split(',');
+		for (var i = 0; i < lists.length; i++) {
+			var lines = lists[i].split('-');
+			lines[1] = lines[1] || lines[0];
+			for (var j = lines[0]; j <= lines[1]; j++) {
+				$('#' + j).addClass('selected');
+			}
+		}
+
+		var $firstLine = $('#' + parseInt(matches[0]));
+		if ($firstLine.length > 0) {
+			$right.scrollTop($firstLine.offset().top);
+		}
+	}
+
+	// Save selected lines
+	var lastLine;
+	$('a.l').click(function(event) {
+		event.preventDefault();
+
+		var $selectedLine = $(this).parent();
+		var selectedLine = parseInt($selectedLine.attr('id'));
+
+		if (event.shiftKey) {
+			if (lastLine) {
+				for (var i = Math.min(selectedLine, lastLine); i <= Math.max(selectedLine, lastLine); i++) {
+					$('#' + i).addClass('selected');
+				}
+			} else {
+				$selectedLine.addClass('selected');
+			}
+		} else if (event.ctrlKey) {
+			$selectedLine.toggleClass('selected');
+		} else {
+			var $selected = $('.l.selected')
+				.not($selectedLine)
+				.removeClass('selected');
+			if ($selected.length > 0) {
+				$selectedLine.addClass('selected');
+			} else {
+				$selectedLine.toggleClass('selected');
+			}
+		}
+
+		lastLine = $selectedLine.hasClass('selected') ? selectedLine : null;
+
+		// Update hash
+		var lines = $('.l.selected')
+			.map(function() {
+				return parseInt($(this).attr('id'));
+			})
+			.get()
+			.sort(function(a, b) {
+				return a - b;
+			});
+
+		var hash = [];
+		var list = [];
+		for (var j = 0; j < lines.length; j++) {
+			if (0 === j && j + 1 === lines.length) {
+				hash.push(lines[j]);
+			} else if (0 === j) {
+				list[0] = lines[j];
+			} else if (lines[j - 1] + 1 !== lines[j] && j + 1 === lines.length) {
+				hash.push(list.join('-'));
+				hash.push(lines[j]);
+			} else if (lines[j - 1] + 1 !== lines[j]) {
+				hash.push(list.join('-'));
+				list = [lines[j]];
+			} else if (j + 1 === lines.length) {
+				list[1] = lines[j];
+				hash.push(list.join('-'));
+			} else {
+				list[1] = lines[j];
+			}
+		}
+
+		window.location.hash = hash.join(',');
+	});
 });
