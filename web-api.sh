@@ -23,7 +23,8 @@ fi
 
 git clone $REPOSITORY $API_WORK_DIR
 cd $API_WORK_DIR
-git checkout -b production origin/production
+git checkout -b production
+git rm .gitignore
 git rm -rf api
 cd ..
 
@@ -40,5 +41,5 @@ apigen -s "NellaFramework-$PACKAGE_VERSION_NAME/sandbox/libs/" -d "$API_WORK_DIR
 cd $API_WORK_DIR
 git add api
 git commit -m "update $DATE_NOW"
-git push origin production
+git push origin production --force
 cd ..
