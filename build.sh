@@ -23,13 +23,13 @@ echo `git log -n 500 --pretty="%cd (%h): %s" --date-order --date=short > history
 #################
 
 git clone https://github.com/nella/framework-sandbox.git sandbox
-cp -R Nella sandbox/libs/Nella
-cp -R vendor/nette/nette/Nette sandbox/libs/Nette
-cp -R vendor/doctrine/common/lib/Doctrine sandbox/libs/Doctrine
-cp -R vendor/doctrine/dbal/lib/Doctrine sandbox/libs/Doctrine
-cp -R vendor/doctrine/orm/lib/Doctrine sandbox/libs/Doctrine
-cp -R vendor/doctrine/migrations/lib/Doctrine sandbox/libs/Doctrine
-cp -R vendor/symfony/console/Symfony sandbox/libs/Symfony
+cp -R Nella sandbox/libs
+cp -R vendor/nette/nette/Nette sandbox/libs
+cp -R vendor/doctrine/common/lib/Doctrine sandbox/libs
+cp -R vendor/doctrine/dbal/lib/Doctrine sandbox/libs
+cp -R vendor/doctrine/orm/lib/Doctrine sandbox/libs
+cp -R vendor/doctrine/migrations/lib/Doctrine sandbox/libs
+cp -R vendor/symfony/console/Symfony sandbox/libs
 
 #########################
 # Nette Framework Tools #
