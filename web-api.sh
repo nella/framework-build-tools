@@ -25,17 +25,17 @@ fi
 # Apigen #
 ##########
 
-apigen -s "NellaFramework-$PACKAGE_VERSION_NAME/sandbox/libs/" -d "$API_WORK_DIR/api" --config "$APIGEN_CONFIG" --template-config "$APIGEN_TEMPLATE_CONFIG"
+apigen -s "NellaFramework-$PACKAGE_VERSION_NAME/sandbox/libs/" -d "$API_WORK_DIR" --config "$APIGEN_CONFIG" --template-config "$APIGEN_TEMPLATE_CONFIG"
 
 #########
 # Clean #
 #########
 
-wget http://api.nellafw.org/404.html -O "$API_WORK_DIR/api/404.html"
+wget http://api.nellafw.org/404.html -O "$API_WORK_DIR/404.html"
 s3cmd del -rf "$BUCKET"
 
 ##########
 # Deploy #
 ##########
 
-s3cmd put -rP "$API_WORK_DIR" "$BUCKET"
+s3cmd put -rP "$API_WORK_DIR/*" "$BUCKET"
