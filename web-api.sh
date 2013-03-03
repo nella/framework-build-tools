@@ -8,7 +8,7 @@ BUILD_TOOLS_DIR="build-tools"
 PACKAGE_VERSION_NAME="2.0dev"
 APIGEN_CONFIG="$BUILD_TOOLS_DIR/apigen-web.neon"
 APIGEN_TEMPLATE_CONFIG="$BUILD_TOOLS_DIR/apigen-template/config.neon"
-REPOSITORY="git@locutus.blueboard.cz:nellafw.org.git"
+BUCKET="s3://api.nellafw.org/"
 API_WORK_DIR="server-api"
 DATE_NOW=`date +%F`
 
@@ -21,25 +21,21 @@ then
 	rm -rf $API_WORK_DIR
 fi
 
-git clone $REPOSITORY $API_WORK_DIR
-cd $API_WORK_DIR
-git checkout -b production
-git rm .gitignore
-git rm -rf api
-cd ..
-
 ##########
 # Apigen #
 ##########
 
 apigen -s "NellaFramework-$PACKAGE_VERSION_NAME/sandbox/libs/" -d "$API_WORK_DIR/api" --config "$APIGEN_CONFIG" --template-config "$APIGEN_TEMPLATE_CONFIG"
 
+#########
+# Clean #
+#########
+
+wget http://api.nellafw.org/404.html -O "$API_WORK_DIR/api/404.html"
+s3cmd del -rf "$BUCKET"
+
 ##########
 # Deploy #
 ##########
 
-cd $API_WORK_DIR
-git add api
-git commit -m "update $DATE_NOW"
-git push origin production --force
-cd ..
+s3cmd put -rP "$API_WORK_DIR" "$BUCKET"
